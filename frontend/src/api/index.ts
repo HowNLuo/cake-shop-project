@@ -3,7 +3,7 @@ import { useAlertStore } from '@/stores/alertStore'
 import router from '@/router'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: '/api',
   timeout: 10000,
 })
 
