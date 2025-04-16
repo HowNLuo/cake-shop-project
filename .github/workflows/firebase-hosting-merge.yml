@@ -26,3 +26,4 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CAKE_SHOP_LUOHOWN }}
           channelId: live
           projectId: cake-shop-luohown
+          entryPoint: frontend
