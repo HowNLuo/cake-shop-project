@@ -9,7 +9,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://cake-shop-luohown.firebaseapp.com/", "http://localhost:5173")
+                .allowedOrigins("https://cake-shop-luohown.firebaseapp.com", "http://localhost:5173", "https://cake-shop-luohown.web.app")
                 .allowedMethods("*");
     }
 }
