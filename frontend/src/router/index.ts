@@ -27,7 +27,7 @@ const routes = [
     component: () => import('@/pages/user/ProductListing.vue'),
   },
   {
-    path: '/product/:id',
+    path: '/products/:id',
     name: 'product-details',
     component: () => import('@/pages/user/ProductDetails.vue'),
   },
@@ -104,7 +104,7 @@ router.beforeEach((to, from, next) => {
   const role = authStore.user?.role
 
   const publicPaths = ['/signin', '/home', '/products', '/product', '/cart', '/signup']
-  const isPublic = publicPaths.includes(to.path)
+  const isPublic = publicPaths.some((path) => to.path === path || to.path.startsWith(path + '/'))
 
   const userPaths = ['/checkout', '/checkout/confirm', '/orders']
   const adminPaths = [

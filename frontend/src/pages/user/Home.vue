@@ -38,7 +38,7 @@
           v-for="product in newArrivals"
           :key="product.id"
           class="bg-white rounded-lg p-4 shadow flex flex-col items-center cursor-pointer transition duration-200 hover:shadow-lg hover:-translate-y-1 hover:ring-2 hover:ring-[#e29396]"
-          @click="router.push(`/product/${product.id}`)"
+          @click="router.push(`/products/${product.id}`)"
         >
           <img
             :src="`src/assets/images/products/${product.imageName}`"
