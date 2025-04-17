@@ -12,6 +12,7 @@
   </div>
   <Alert />
   <Message />
+  <Loading />
 </template>
 
 <script setup lang="ts">

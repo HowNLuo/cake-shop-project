@@ -11,6 +11,7 @@ declare module 'vue' {
     Alert: typeof import('./components/ui/Alert.vue')['default']
     CategoryForm: typeof import('./components/CategoryForm.vue')['default']
     Dialog: typeof import('./components/ui/Dialog.vue')['default']
+    Loading: typeof import('./components/ui/Loading.vue')['default']
     Message: typeof import('./components/ui/Message.vue')['default']
     ProductForm: typeof import('./components/ProductForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

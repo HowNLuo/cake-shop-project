@@ -1,21 +1,29 @@
 import axios from 'axios'
 import { useAlertStore } from '@/stores/alertStore'
 import router from '@/router'
+import { useLoadingStore } from '@/stores/loadingStore'
+
+const loading = useLoadingStore()
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: '/api',
   timeout: 10000,
 })
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
   if (token) config.headers.Authorization = `Bearer ${token}`
+  loading.start()
   return config
 })
 
 api.interceptors.response.use(
-  (res) => res,
+  (res) => {
+    loading.stop()
+    return res
+  },
   (err) => {
+    loading.stop()
     const status = err?.response?.status
 
     if (status === 401) {
