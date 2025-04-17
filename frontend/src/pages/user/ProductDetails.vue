@@ -13,7 +13,7 @@
 
     <div class="bg-white rounded-xl shadow p-6 text-center">
       <img
-        :src="`/src/assets/images/products/${product?.imageName}`"
+        :src="`/images/products/${product?.imageName}`"
         :alt="product?.name"
         loading="lazy"
         class="w-40 h-40 mx-auto mb-6 object-cover"

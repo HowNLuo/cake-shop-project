@@ -31,7 +31,7 @@
               class="mb-2 flex items-center gap-3"
             >
               <img
-                :src="`/src/assets/images/products/${item.imageName}`"
+                :src="`/images/products/${item.imageName}`"
                 :alt="item.name"
                 class="w-12 h-12 object-cover rounded"
               />

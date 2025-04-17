@@ -14,7 +14,7 @@
     >
       <div class="flex items-center gap-4">
         <img
-          :src="`/src/assets/images/products/${item.imageName}`"
+          :src="`/images/products/${item.imageName}`"
           :alt="item.name"
           class="w-16 h-16 object-cover rounded"
         />

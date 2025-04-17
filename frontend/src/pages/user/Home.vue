@@ -21,7 +21,7 @@
         @click="router.push({ path: '/products', query: { category: category.name } })"
       >
         <img
-          :src="`src/assets/images/categories/${category.imageName}`"
+          :src="`/images/categories/${category.imageName}`"
           :alt="category.name"
           class="w-24 h-26 object-cover mx-auto"
           loading="lazy"
@@ -41,7 +41,7 @@
           @click="router.push(`/products/${product.id}`)"
         >
           <img
-            :src="`src/assets/images/products/${product.imageName}`"
+            :src="`/images/products/${product.imageName}`"
             :alt="product.name"
             class="w-26 h-26 object-cover mx-auto rounded-xl"
             loading="lazy"
