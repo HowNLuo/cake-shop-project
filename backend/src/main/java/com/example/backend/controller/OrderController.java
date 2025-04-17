@@ -41,6 +41,8 @@ public class OrderController {
         if (order.getItems() != null) {
             for (OrderItem item : order.getItems()) {
                 item.setOrder(order);
+                productRepository.findById(item.getProductId())
+                    .ifPresent(product -> item.setProductName(product.getName()));
             }
         }
         return orderService.createOrder(order);
