@@ -1,31 +1,28 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.ProductDTO;
+import com.example.backend.dto.product.ProductDTO;
 import com.example.backend.entity.Product;
 import com.example.backend.service.ProductService;
+import com.example.backend.repository.ProductRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductRepository productRepository;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, ProductRepository productRepository) {
         this.productService = productService;
+        this.productRepository = productRepository;
     }
 
     @GetMapping
     public List<ProductDTO> getAllProducts() {
         return productService.getAllProducts();
-    }
-
-    @GetMapping("/{id}")
-    public ProductDTO getProductById(@PathVariable Long id) {
-        return productService.getProductById(id);
     }
 
     @PostMapping

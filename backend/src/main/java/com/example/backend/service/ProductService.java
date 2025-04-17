@@ -1,10 +1,12 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.ProductDTO;
+import com.example.backend.dto.product.ProductDTO;
 import com.example.backend.entity.Product;
 import com.example.backend.repository.CategoryRepository;
 import com.example.backend.repository.ProductRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,13 +27,6 @@ public class ProductService {
         return products.stream().map(this::toDTO).toList();
     }
 
-    public ProductDTO getProductById(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        return toDTO(product);
-    }
-
     public ProductDTO createProduct(Product product) {
         Product saved = productRepository.save(product);
         return toDTO(saved);
@@ -43,16 +38,16 @@ public class ProductService {
 
     public ProductDTO updateProduct(Long id, Product updatedProduct) {
         Product product = productRepository.findById(id)
-                .map(p -> {
-                    p.setName(updatedProduct.getName());
-                    p.setDescription(updatedProduct.getDescription());
-                    p.setPrice(updatedProduct.getPrice());
-                    p.setCategoryId(updatedProduct.getCategoryId());
-                    p.setIngredients(updatedProduct.getIngredients());
-                    p.setImageName(updatedProduct.getImageName());
-                    return productRepository.save(p);
-                })
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+            .map(p -> {
+                p.setName(updatedProduct.getName());
+                p.setDescription(updatedProduct.getDescription());
+                p.setPrice(updatedProduct.getPrice());
+                p.setCategoryId(updatedProduct.getCategoryId());
+                p.setIngredients(updatedProduct.getIngredients());
+                p.setImageName(updatedProduct.getImageName());
+                return productRepository.save(p);
+            })
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + id));
 
         return toDTO(product);
     }

@@ -19,10 +19,6 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public Optional<Order> getOrderById(Long id) {
-        return orderRepository.findById(id);
-    }
-
     public Order createOrder(Order order) {
         return orderRepository.save(order);
     }

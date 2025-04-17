@@ -1,6 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.DashboardDTO;
+import com.example.backend.dto.common.DashboardDTO;
 import com.example.backend.repository.OrderRepository;
 import com.example.backend.repository.ProductRepository;
 import com.example.backend.repository.UserRepository;

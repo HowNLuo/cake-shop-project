@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.entity.Order;
 import com.example.backend.entity.OrderItem;
+import com.example.backend.repository.ProductRepository;
 import com.example.backend.service.OrderService;
 import com.example.backend.service.ProductService;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +14,12 @@ import java.util.List;
 public class OrderController {
     private final OrderService orderService;
     private final ProductService productService;
+    private final ProductRepository productRepository;
 
-
-    public OrderController(OrderService orderService, ProductService productService) {
+    public OrderController(OrderService orderService, ProductService productService, ProductRepository productRepository) {
         this.orderService = orderService;
         this.productService = productService;
+        this.productRepository = productRepository;
     }
 
     @GetMapping
@@ -26,28 +28,12 @@ public class OrderController {
         for (Order order : orders) {
             if (order.getItems() != null) {
                 for (OrderItem item : order.getItems()) {
-                    var product = productService.getProductById(item.getProductId());
-                    if (product != null) {
-                        item.setProductName(product.getName());
-                    }
+                    var productOpt = productRepository.findById(item.getProductId());
+                    productOpt.ifPresent(product -> item.setProductName(product.getName()));
                 }
             }
         }
         return orders;
-    }
-
-    @GetMapping("/{id}")
-    public Order getOrderById(@PathVariable Long id) {
-        Order order = orderService.getOrderById(id).orElseThrow();
-        if (order.getItems() != null) {
-            for (OrderItem item : order.getItems()) {
-                var product = productService.getProductById(item.getProductId());
-                if (product != null) {
-                    item.setProductName(product.getName());
-                }
-            }
-        }
-        return order;
     }
 
     @PostMapping
@@ -66,10 +52,8 @@ public class OrderController {
         for (Order order : orders) {
             if (order.getItems() != null) {
                 for (OrderItem item : order.getItems()) {
-                    var product = productService.getProductById(item.getProductId());
-                    if (product != null) {
-                        item.setProductName(product.getName());
-                    }
+                    var productOpt = productRepository.findById(item.getProductId());
+                    productOpt.ifPresent(product -> item.setProductName(product.getName()));
                 }
             }
         }
