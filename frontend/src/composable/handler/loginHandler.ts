@@ -1,10 +1,12 @@
 import { login } from '@/api/auth'
 import { useAuthStore } from '@/stores/authStore'
+import { useCartStore } from '@/stores/cartStore'
 import type { LoginPayload } from '@/types/auth'
 import { useRouter } from 'vue-router'
 
 export const useLoginHandler = () => {
   const authStore = useAuthStore()
+  const cartStore = useCartStore()
   const router = useRouter()
 
   const handleLogin = async (payload: LoginPayload) => {
@@ -31,6 +33,8 @@ export const useLoginHandler = () => {
       lastLoginTime: data.lastLoginTime,
       createdAt: data.createdAt,
     })
+
+    if (data.role === 'Admin') cartStore.clearCart()
 
     router.push(data.role === 'Admin' ? '/dashboard' : '/')
   }
