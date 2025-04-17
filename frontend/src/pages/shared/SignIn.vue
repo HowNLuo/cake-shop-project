@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useLoginHandler } from '@/services/auth/loginHandler'
+import { useLoginHandler } from '@/composable/handler/loginHandler'
 import { useAlertStore } from '@/stores/alertStore'
 import type { LoginPayload } from '@/types/auth'
 
@@ -44,7 +44,6 @@ const formData = ref<LoginPayload>({
   email: '',
   password: '',
 })
-
 
 const { handleLogin } = useLoginHandler()
 

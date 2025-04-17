@@ -1,12 +1,8 @@
 import type { UpdateUserPayload, User } from '@/types/user'
 import api from '.'
 
-export const getUserList = () => {
+export const getUsers = () => {
   return api.get<User[]>('/users')
-}
-
-export const getUser = (id: number) => {
-  return api.get<User>(`/users/${id}`)
 }
 
 export const updateUser = (id: number, payload: UpdateUserPayload) => {

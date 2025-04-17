@@ -91,13 +91,14 @@ import { useAlertStore } from '@/stores/alertStore'
 import { useOrderStore } from '@/stores/orderStore'
 import { useAuthStore } from '@/stores/authStore'
 import type { CreateOrderPayload } from '@/types/order'
+import { useCreateOrder } from '@/composable/order/useCreateOrder'
 
 const router = useRouter()
 const alert = useAlertStore()
 const cartStore = useCartStore()
 const messageStore = useMessageStore()
-const orderStore = useOrderStore()
 const authStore = useAuthStore()
+const { fetch: createOrder } = useCreateOrder()
 
 const formData = reactive({
   email: '',
@@ -145,10 +146,10 @@ const placeOrder = async () => {
         })),
       }
 
-      const data = await orderStore.createOrder(payload)
+      const data = await createOrder(payload)
       cartStore.clearCart()
       messageStore.show('Order placed successfully!', 'success')
-      router.push(`/checkout/confirm/${data.id}`)
+      router.push(`/checkout/confirm/${data?.id}`)
     },
   })
 }

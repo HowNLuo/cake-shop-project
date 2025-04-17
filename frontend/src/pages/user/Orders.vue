@@ -12,7 +12,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-if="orders.length === 0">
+          <tr v-if="orders?.length === 0">
             <td colspan="4" class="text-center py-8 text-gray-400 italic">
               You have no orders yet.
             </td>
@@ -64,6 +64,7 @@
 </template>
 
 <script setup lang="ts">
+import { useGetOrdersById } from '@/composable/order/useGetOrdersById'
 import { useAuthStore } from '@/stores/authStore'
 import { useOrderStore } from '@/stores/orderStore'
 import type { Order } from '@/types/order'
@@ -84,10 +85,10 @@ const statusClass = (status: string) => {
 }
 
 const authStore = useAuthStore()
-const orderStore = useOrderStore()
+const { fetch: getOrdersByUserId } = useGetOrdersById()
 
 const userId = authStore.user?.id
-const orders = ref<Order[]>([])
+const orders = ref<Order[] | null>([])
 const expandedRows = ref<number[]>([])
 
 const toggleRow = (orderId: number) => {
@@ -112,6 +113,6 @@ const formatDateTime = (date: string | Date) => {
 
 onMounted(async () => {
   if (!userId) return
-  orders.value = await orderStore.getOrdersByUserId(userId)
+  orders.value = await getOrdersByUserId(userId)
 })
 </script>

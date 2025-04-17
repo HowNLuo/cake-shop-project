@@ -72,12 +72,14 @@ import { useMessageStore } from '@/stores/messageStore'
 import { useProductStore } from '@/stores/productStore'
 import { useAuthStore } from '@/stores/authStore'
 import { storeToRefs } from 'pinia'
+import { useGetProducts } from '@/composable/product/useGetProducts'
 
 const route = useRoute()
 const router = useRouter()
 const message = useMessageStore()
 const productStore = useProductStore()
 const { products } = storeToRefs(productStore)
+const { fetch: getProducts } = useGetProducts()
 
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
@@ -116,8 +118,6 @@ const addToCart = () => {
 }
 
 onMounted(() => {
-  if (!products.value.length) {
-    productStore.getProducts()
-  }
+  if (!products.value.length) getProducts()
 })
 </script>

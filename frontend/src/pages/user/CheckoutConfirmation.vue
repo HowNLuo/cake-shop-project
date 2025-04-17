@@ -41,11 +41,13 @@ import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useOrderStore } from '@/stores/orderStore'
 import type { Order } from '@/types/order'
+import { getOrdersByUserId } from '@/api/order'
+import { useGetOrder } from '@/composable/order/useGetOrder'
 
 const route = useRoute()
 const router = useRouter()
-const orderStore = useOrderStore()
-const order = ref<Order>()
+const order = ref<Order | null>()
+const {fetch: getOrder} = useGetOrder()
 
 const formatDateTime = (date: string | Date) => {
   const d = typeof date === 'string' ? new Date(date) : date
@@ -61,7 +63,7 @@ const formatDateTime = (date: string | Date) => {
 onMounted(async () => {
   const id = Number(route.params.id)
   if (!isNaN(id)) {
-    order.value = await orderStore.getOrder(id)
+    order.value = await getOrder(id)
   }
 })
 </script>

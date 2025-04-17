@@ -54,16 +54,20 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
-import { useCategoryStore } from '@/stores/categoryStore'
-import type { Category, CreateCategoryPayload } from '@/types/category'
+import type { CreateCategoryPayload } from '@/types/category'
 import { useMessageStore } from '@/stores/messageStore'
+import { useCreateCategory } from '@/composable/category/useCreateCategory'
+import { useUpdateCategory } from '@/composable/category/useUpdateCategory'
+import { useGetCategory } from '@/composable/category/useGetCategory'
 
-const categoryStore = useCategoryStore()
 const message = useMessageStore()
+const { fetch: createCategory } = useCreateCategory()
+const { fetch: updateCategory } = useUpdateCategory()
+const { fetch: getCategory } = useGetCategory()
 
 const props = defineProps<{
   mode: 'add' | 'edit'
-  category?: Category
+  categoryId?: number
 }>()
 
 const formData = ref<CreateCategoryPayload>({
@@ -85,20 +89,23 @@ const handleSubmit = async () => {
     return
   }
 
-  if (props.mode === 'edit' && props.category) {
-    await categoryStore.updateCategory(props.category.id, formData.value)
+  if (props.mode === 'edit') {
+    await updateCategory(props.categoryId!, formData.value)
     message.show('Category updated successfully', 'success')
   } else {
-    await categoryStore.createCategory(formData.value)
+    await createCategory(formData.value)
     message.show('Category created successfully', 'success')
   }
   emit('close')
 }
 
-onMounted(() => {
-  if (props.mode === 'edit' && props.category) {
-    const { name, description, imageName } = props.category
-    formData.value = { name, description, imageName }
+onMounted(async () => {
+  if (props.mode === 'edit' && props.categoryId) {
+    const category = await getCategory(props.categoryId)
+    if (category) {
+      const { name, description, imageName } = category
+      formData.value = { name, description, imageName }
+    }
   }
 })
 </script>

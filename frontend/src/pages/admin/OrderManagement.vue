@@ -5,11 +5,11 @@
       <table class="w-full text-left border-collapse">
         <thead class="bg-gray-100">
           <tr>
-            <th class="py-3 px-4 border-b">Order ID</th>
-            <th class="py-3 px-4 border-b">Order Date</th>
-            <th class="py-3 px-4 border-b">Customer</th>
-            <th class="py-3 px-4 border-b">Total</th>
-            <th class="py-3 px-4 border-b">Status</th>
+            <th class="py-3 px-4">Order ID</th>
+            <th class="py-3 px-4">Order Date</th>
+            <th class="py-3 px-4">Customer</th>
+            <th class="py-3 px-4">Total</th>
+            <th class="py-3 px-4">Status</th>
           </tr>
         </thead>
         <tbody>
@@ -37,7 +37,9 @@
             <tr v-if="expandedOrderIds.includes(order.id)">
               <td colspan="5" class="bg-gray-50 px-4 py-4">
                 <div class="bg-white rounded-lg shadow-md p-4">
-                  <h4 class="font-semibold text-gray-800 text-base border-b pb-2 mb-3">Order Items</h4>
+                  <h4 class="font-semibold text-gray-800 text-base border-b pb-2 mb-3">
+                    Order Items
+                  </h4>
                   <ul class="text-sm divide-y divide-gray-100">
                     <li
                       v-for="item in order.items"
@@ -46,7 +48,9 @@
                     >
                       <span class="text-gray-800">{{ item.productName }}</span>
                       <span class="text-right text-gray-600">Qty: {{ item.quantity }}</span>
-                      <span class="text-right text-gray-800 font-medium">${{ (item.price * item.quantity).toFixed(2) }}</span>
+                      <span class="text-right text-gray-800 font-medium"
+                        >${{ (item.price * item.quantity).toFixed(2) }}</span
+                      >
                     </li>
                   </ul>
                 </div>
@@ -62,8 +66,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useOrderStore } from '@/stores/orderStore'
+import { useGetOrders } from '@/composable/order/useGetOrders'
+import { storeToRefs } from 'pinia'
 
 const orderStore = useOrderStore()
+const { orders } = storeToRefs(orderStore)
+const { fetch: getOrders } = useGetOrders()
 
 const expandedOrderIds = ref<number[]>([])
 
@@ -83,7 +91,7 @@ const formatDate = (date: string) => {
   })
 }
 
-onMounted(async () => {
-  await orderStore.getOrders()
+onMounted(() => {
+  if (!orders.value.length) getOrders()
 })
 </script>

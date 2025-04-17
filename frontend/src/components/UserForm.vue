@@ -1,7 +1,7 @@
 <template>
   <Dialog title="Edit User" closable @close="$emit('close')">
     <template #default>
-      <div v-if="editingUser">
+      <div v-if="formData.name">
         <div class="mb-2">
           <label class="block text-sm font-medium">Name</label>
           <input v-model="formData.name" class="border w-full px-2 py-1 rounded" />
@@ -31,14 +31,16 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useUserStore } from '@/stores/userStore'
-import type { UpdateUserPayload, User } from '@/types/user'
+import type { UpdateUserPayload } from '@/types/user'
 import { useMessageStore } from '@/stores/messageStore'
+import { useUpdateUser } from '@/composable/user/useUpdateUser'
 
 const message = useMessageStore()
 const userStore = useUserStore()
+const { fetch: updateUser } = useUpdateUser()
 
 const props = defineProps<{
-  user?: User
+  userId?: number
 }>()
 const emits = defineEmits(['close'])
 
@@ -47,29 +49,30 @@ const formData = ref<UpdateUserPayload>({
   email: '',
 })
 
-const editingUser = ref<User | undefined>(undefined)
-
 const isFormValid = computed(() => {
   const f = formData.value
   return f.name && f.email
 })
 
 const handleSave = async () => {
-  if (!editingUser.value?.name || !editingUser.value?.email) {
+  if (!formData.value.name || !formData.value.email) {
     message.show('Please fill in all fields.', 'error')
     return
   }
-  if (editingUser.value && props.user) {
-    await userStore.updateUser(props.user.id, formData.value)
+  if (props.userId) {
+    await updateUser(props.userId, formData.value)
     message.show('User updated successfully', 'success')
   }
   emits('close')
 }
 
 onMounted(async () => {
-  if (props.user) {
-    const { name, email } = props.user
-    formData.value = { name, email }
+  if (props.userId) {
+    const user = userStore.users.find((u) => u.id === props.userId)
+    if (user) {
+      const { name, email } = user
+      formData.value = { name, email }
+    }
   }
 })
 </script>

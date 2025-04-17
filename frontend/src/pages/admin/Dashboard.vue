@@ -105,10 +105,14 @@ import { useOrderStore } from '@/stores/orderStore'
 import { getDashboardStats } from '@/api/dashboard'
 import type { Order } from '@/types/order'
 import type { DashboardStats } from '@/types/dashboard'
-
+import { useGetOrders } from '@/composable/order/useGetOrders'
+import { storeToRefs } from 'pinia'
 
 const router = useRouter()
 const orderStore = useOrderStore()
+const { orders } = storeToRefs(orderStore)
+const { fetch: getOrders } = useGetOrders()
+
 const recentOrders = ref<Order[]>([])
 const stats = ref<DashboardStats>({
   todayOrders: 0,
@@ -118,7 +122,7 @@ const stats = ref<DashboardStats>({
 })
 
 onMounted(async () => {
-  await orderStore.getOrders()
+  if (!orders.value.length) await getOrders()
   recentOrders.value = orderStore.orders.slice(-5).reverse()
   const dashboardData = await getDashboardStats()
   stats.value = dashboardData

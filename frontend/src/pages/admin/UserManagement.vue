@@ -1,7 +1,7 @@
 <template>
   <div class="p-8">
     <h1 class="text-3xl font-bold mb-6">User Management</h1>
-    <table class="min-w-full border text-left text-sm font-light">
+    <table class="min-w-full text-left text-sm font-light">
       <thead class="bg-gray-100">
         <tr>
           <th class="px-6 py-4 font-medium">ID</th>
@@ -34,7 +34,7 @@
           <td class="px-6 py-4">
             <button
               class="border border-gray-300 rounded px-3 py-1 text-sm bg-white hover:bg-blue-500 hover:text-white hover:border-blue-500 transition-colors"
-              @click="openEditDialog(user)"
+              @click="openEditDialog(user.id)"
             >
               Edit
             </button>
@@ -42,22 +42,24 @@
         </tr>
       </tbody>
     </table>
-    <UserForm v-if="showDialog" :user="editingUser" @close="showDialog = false" />
+    <UserForm v-if="showDialog" :user-id="selectedUserId" @close="showDialog = false" />
   </div>
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useUserStore } from '@/stores/userStore'
 import { storeToRefs } from 'pinia'
-import type { User } from '@/types/user'
+import { useGetUsers } from '@/composable/user/useGetUsers'
 
 const userStore = useUserStore()
 const { users } = storeToRefs(userStore)
-const showDialog = ref(false)
-const editingUser = ref<User | undefined>(undefined)
+const { fetch: getUsers } = useGetUsers()
 
-const openEditDialog = (user: User) => {
-  editingUser.value = { ...user }
+const showDialog = ref(false)
+const selectedUserId = ref<number | undefined>()
+
+const openEditDialog = (userId: number) => {
+  selectedUserId.value = userId
   showDialog.value = true
 }
 
@@ -70,6 +72,6 @@ const formatDate = (date: string) => {
 }
 
 onMounted(() => {
-  userStore.getUsers()
+  if (!users.value.length) getUsers()
 })
 </script>

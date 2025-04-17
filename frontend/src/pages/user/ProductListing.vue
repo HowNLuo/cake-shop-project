@@ -63,6 +63,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useProductStore } from '@/stores/productStore'
 import { storeToRefs } from 'pinia'
+import { useGetCategories } from '@/composable/category/useGetCategories'
+import { useGetProducts } from '@/composable/product/useGetProducts'
 
 const router = useRouter()
 const route = useRoute()
@@ -70,6 +72,8 @@ const productStore = useProductStore()
 const categoryStore = useCategoryStore()
 const { products } = storeToRefs(productStore)
 const { categories } = storeToRefs(categoryStore)
+const { fetch: getCategories } = useGetCategories()
+const { fetch: getProducts, error: productError } = useGetProducts()
 
 const search = ref('')
 const selectedCategories = ref<string[]>(['all'])
@@ -86,13 +90,10 @@ const filteredProducts = computed(() => {
   })
 })
 
-onMounted(() => {
-  if (!products.value.length) {
-    productStore.getProducts()
-  }
-  if (!categories.value.length) {
-    categoryStore.getCategories()
-  }
+onMounted(async () => {
+  if (!products.value.length) await getProducts()
+  if (!categories.value.length) await getCategories()
+
   if (initialCategory && categories.value.some((c) => c.name === initialCategory)) {
     selectedCategories.value = [initialCategory]
   }

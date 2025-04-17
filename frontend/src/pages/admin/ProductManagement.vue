@@ -29,7 +29,7 @@
             <td class="px-6 py-4 space-x-2">
               <button
                 class="border px-3 py-1 rounded hover:bg-gray-100"
-                @click="openEditDialog(product)"
+                @click="openEditDialog(product.id)"
               >
                 Edit
               </button>
@@ -46,8 +46,8 @@
     </div>
     <ProductForm
       v-if="showDialog"
-      :mode="editingProduct ? 'edit' : 'add'"
-      :product="editingProduct"
+      :mode="selectedProductId !== null ? 'edit' : 'add'"
+      :product-id="selectedProductId"
       @close="showDialog = false"
     />
   </div>
@@ -59,23 +59,26 @@ import { storeToRefs } from 'pinia'
 import { useProductStore } from '@/stores/productStore'
 import { useMessageStore } from '@/stores/messageStore'
 import { useAlertStore } from '@/stores/alertStore'
-import type { Product } from '@/types/product'
+import { useGetProducts } from '@/composable/product/useGetProducts'
+import { useDeleteProduct } from '@/composable/product/useDeleteProduct'
 
 const message = useMessageStore()
 const alert = useAlertStore()
 const productStore = useProductStore()
 const { products } = storeToRefs(productStore)
+const { fetch: getProducts,  } = useGetProducts()
+const { fetch: deleteProduct } = useDeleteProduct()
 
 const showDialog = ref(false)
-const editingProduct = ref<Product | undefined>(undefined)
+const selectedProductId = ref<number | undefined>()
 
 const openAddDialog = () => {
-  editingProduct.value = undefined
+  selectedProductId.value = undefined
   showDialog.value = true
 }
 
-const openEditDialog = (product: Product) => {
-  editingProduct.value = { ...product }
+const openEditDialog = (id: number) => {
+  selectedProductId.value = id
   showDialog.value = true
 }
 
@@ -87,15 +90,13 @@ const handleDelete = (id: number) => {
     cancelText: 'Cancel',
     type: 'confirm',
     onConfirm: async () => {
-      await productStore.deleteProduct(id)
+      await deleteProduct(id)
       message.show('Product deleted', 'success')
     },
   })
 }
 
 onMounted(() => {
-  if (!products.value.length) {
-    productStore.getProducts()
-  }
+  if (!products.value.length) getProducts()
 })
 </script>

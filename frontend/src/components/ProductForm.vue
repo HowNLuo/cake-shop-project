@@ -81,20 +81,25 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
-import { useProductStore } from '@/stores/productStore'
-import type { CreateProductPayload, Product } from '@/types/product'
+import type { CreateProductPayload } from '@/types/product'
 import { useMessageStore } from '@/stores/messageStore'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { storeToRefs } from 'pinia'
+import { useGetCategories } from '@/composable/category/useGetCategories'
+import { useGetProduct } from '@/composable/product/useGetProduct'
+import { useUpdateProduct } from '@/composable/product/useUpdateProduct'
+import { useCreateProduct } from '@/composable/product/useCreateProduct'
 
 const message = useMessageStore()
-const productStore = useProductStore()
 const categoryStore = useCategoryStore()
 const { categories } = storeToRefs(categoryStore)
+const { fetch: getCategories } = useGetCategories()
+const { fetch: updateProduct } = useUpdateProduct()
+const { fetch: createProduct } = useCreateProduct()
 
 const props = defineProps<{
   mode: 'add' | 'edit'
-  product?: Product
+  productId?: number
 }>()
 
 const formData = ref<CreateProductPayload>({
@@ -126,23 +131,27 @@ const handleSubmit = async () => {
     return
   }
 
-  if (props.mode === 'edit' && props.product) {
-    await productStore.updateProduct(props.product.id, formData.value)
+  if (props.mode === 'edit' && props.productId !== undefined) {
+    await updateProduct(props.productId, formData.value)
     message.show('Product updated successfully', 'success')
   } else {
-    await productStore.createProduct(formData.value)
+    await createProduct(formData.value)
     message.show('Product created successfully', 'success')
   }
   emit('close')
 }
 
-onMounted(() => {
-  if (props.mode === 'edit' && props.product) {
-    const { name, categoryId, price, description, ingredients, imageName } = props.product
-    formData.value = { name, categoryId, price, description, ingredients, imageName }
-  }
-  if (!categories.value.length) {
-    categoryStore.getCategories()
+const { fetch: getProduct } = useGetProduct()
+
+onMounted(async () => {
+  if (!categories.value.length) await getCategories()
+
+  if (props.mode === 'edit' && props.productId !== undefined) {
+    const product = await getProduct(props.productId)
+    if (product) {
+      const { name, categoryId, price, description, ingredients, imageName } = product
+      formData.value = { name, categoryId, price, description, ingredients, imageName }
+    }
   }
 })
 </script>

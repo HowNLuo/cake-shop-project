@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRegisterHandler } from '@/services/auth/registerHandler'
+import { useRegisterHandler } from '@/composable/handler/registerHandler'
 import { useAlertStore } from '@/stores/alertStore'
 import type { RegisterPayload } from '@/types/auth'
 import { ref } from 'vue'

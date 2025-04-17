@@ -59,15 +59,19 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useProductStore } from '@/stores/productStore'
+import { useGetCategories } from '@/composable/category/useGetCategories'
 import { useCategoryStore } from '@/stores/categoryStore'
+import { useProductStore } from '@/stores/productStore'
 import { storeToRefs } from 'pinia'
+import { useGetProducts } from '@/composable/product/useGetProducts'
 
 const router = useRouter()
-const productStore = useProductStore()
 const categoryStore = useCategoryStore()
-const { products } = storeToRefs(productStore)
+const productStore = useProductStore()
 const { categories } = storeToRefs(categoryStore)
+const { products } = storeToRefs(productStore)
+const { fetch: getCategories, error: categoryError, loading: categoryLoading } = useGetCategories()
+const { fetch: getProducts, error: productError, loading: productLoading } = useGetProducts()
 
 const sortedProducts = computed(() => {
   return [...products.value].sort(
@@ -77,12 +81,8 @@ const sortedProducts = computed(() => {
 
 const newArrivals = computed(() => sortedProducts.value.slice(0, 6))
 
-onMounted(() => {
-  if (!products.value.length) {
-    productStore.getProducts()
-  }
-  if (!categories.value.length) {
-    categoryStore.getCategories()
-  }
+onMounted(async () => {
+  if (!products.value.length) await getProducts()
+  if (!categories.value.length) await getCategories()
 })
 </script>

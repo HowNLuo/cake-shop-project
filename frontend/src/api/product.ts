@@ -5,10 +5,6 @@ export const getProducts = () => {
   return api.get<Product[]>('/products')
 }
 
-export const getProduct = (id: number) => {
-  return api.get<Product>(`/products/${id}`)
-}
-
 export const createProduct = (payload: CreateProductPayload) => {
   return api.post<Product>('/products', payload)
 }
