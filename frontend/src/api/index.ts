@@ -6,7 +6,7 @@ import { useLoadingStore } from '@/stores/loadingStore'
 const loading = useLoadingStore()
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
 })
 
