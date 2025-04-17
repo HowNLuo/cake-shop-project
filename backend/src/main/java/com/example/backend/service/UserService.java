@@ -24,7 +24,6 @@ public class UserService {
                 .map(user -> {
                     user.setName(updatedUser.getName());
                     user.setEmail(updatedUser.getEmail());
-                    user.setRole(updatedUser.getRole());
                     return userRepository.save(user);
                 })
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
