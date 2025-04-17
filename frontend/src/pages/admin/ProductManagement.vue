@@ -46,7 +46,7 @@
     </div>
     <ProductForm
       v-if="showDialog"
-      :mode="selectedProductId !== null ? 'edit' : 'add'"
+      :mode="!!selectedProductId ? 'edit' : 'add'"
       :product-id="selectedProductId"
       @close="showDialog = false"
     />
@@ -66,7 +66,7 @@ const message = useMessageStore()
 const alert = useAlertStore()
 const productStore = useProductStore()
 const { products } = storeToRefs(productStore)
-const { fetch: getProducts,  } = useGetProducts()
+const { fetch: getProducts } = useGetProducts()
 const { fetch: deleteProduct } = useDeleteProduct()
 
 const showDialog = ref(false)
