@@ -27,7 +27,11 @@ api.interceptors.response.use(
     const status = err?.response?.status
 
     if (status === 401) {
-      router.push('/signin')
+      if (router.currentRoute.value.path === '/signin') {
+        showAlert('Email or password is incorrect.')
+      } else {
+        router.push('/signin')
+      }
     } else if (status === 403) {
       showAlert('你沒有權限執行這個操作')
     } else if (status === 500) {
