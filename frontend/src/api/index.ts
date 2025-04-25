@@ -7,7 +7,7 @@ const loading = useLoadingStore()
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  timeout: 20000,
+  timeout: 10000,
 })
 
 api.interceptors.request.use((config) => {
