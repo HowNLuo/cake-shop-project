@@ -66,7 +66,7 @@ const handleSave = async () => {
   emits('close')
 }
 
-onMounted(async () => {
+onMounted(() => {
   if (props.userId) {
     const user = userStore.users.find((u) => u.id === props.userId)
     if (user) {

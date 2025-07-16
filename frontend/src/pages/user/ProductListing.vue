@@ -73,7 +73,7 @@ const categoryStore = useCategoryStore()
 const { products } = storeToRefs(productStore)
 const { categories } = storeToRefs(categoryStore)
 const { fetch: getCategories } = useGetCategories()
-const { fetch: getProducts, error: productError } = useGetProducts()
+const { fetch: getProducts } = useGetProducts()
 
 const search = ref('')
 const selectedCategories = ref<string[]>(['all'])
@@ -91,8 +91,8 @@ const filteredProducts = computed(() => {
 })
 
 onMounted(async () => {
-  if (!products.value.length) await getProducts()
-  if (!categories.value.length) await getCategories()
+  if (!products.value.length) getProducts()
+  if (!categories.value.length) getCategories()
 
   if (initialCategory && categories.value.some((c) => c.name === initialCategory)) {
     selectedCategories.value = [initialCategory]

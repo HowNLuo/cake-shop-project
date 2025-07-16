@@ -66,7 +66,6 @@
 <script setup lang="ts">
 import { useGetOrdersById } from '@/composable/order/useGetOrdersById'
 import { useAuthStore } from '@/stores/authStore'
-import { useOrderStore } from '@/stores/orderStore'
 import type { Order } from '@/types/order'
 import { onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'

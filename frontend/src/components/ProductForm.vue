@@ -144,7 +144,7 @@ const handleSubmit = async () => {
 const { fetch: getProduct } = useGetProduct()
 
 onMounted(async () => {
-  if (!categories.value.length) await getCategories()
+  if (!categories.value.length) getCategories()
 
   if (props.mode === 'edit' && props.productId !== undefined) {
     const product = await getProduct(props.productId)

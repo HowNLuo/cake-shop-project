@@ -39,15 +39,13 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useOrderStore } from '@/stores/orderStore'
 import type { Order } from '@/types/order'
-import { getOrdersByUserId } from '@/api/order'
 import { useGetOrder } from '@/composable/order/useGetOrder'
 
 const route = useRoute()
 const router = useRouter()
 const order = ref<Order | null>()
-const {fetch: getOrder} = useGetOrder()
+const { fetch: getOrder } = useGetOrder()
 
 const formatDateTime = (date: string | Date) => {
   const d = typeof date === 'string' ? new Date(date) : date

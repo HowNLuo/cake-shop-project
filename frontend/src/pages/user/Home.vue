@@ -70,8 +70,8 @@ const categoryStore = useCategoryStore()
 const productStore = useProductStore()
 const { categories } = storeToRefs(categoryStore)
 const { products } = storeToRefs(productStore)
-const { fetch: getCategories, error: categoryError, loading: categoryLoading } = useGetCategories()
-const { fetch: getProducts, error: productError, loading: productLoading } = useGetProducts()
+const { fetch: getCategories } = useGetCategories()
+const { fetch: getProducts } = useGetProducts()
 
 const sortedProducts = computed(() => {
   return [...products.value].sort(
@@ -82,7 +82,7 @@ const sortedProducts = computed(() => {
 const newArrivals = computed(() => sortedProducts.value.slice(0, 6))
 
 onMounted(async () => {
-  if (!products.value.length) await getProducts()
-  if (!categories.value.length) await getCategories()
+  if (!products.value.length) getProducts()
+  if (!categories.value.length) getCategories()
 })
 </script>
