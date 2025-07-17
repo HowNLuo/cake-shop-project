@@ -14,26 +14,31 @@
 
     <!-- Category Shortcuts -->
     <div class="flex justify-center gap-4 flex-wrap px-4 mb-10">
-      <div
-        v-for="category in categories"
-        :key="category.id"
-        class="text-center bg-white p-4 rounded-lg shadow w-32 cursor-pointer transition duration-200 hover:shadow-lg hover:-translate-y-1 hover:ring-2 hover:ring-[#e29396]"
-        @click="router.push({ path: '/products', query: { category: category.name } })"
-      >
-        <img
-          :src="`/images/categories/${category.imageName}`"
-          :alt="category.name"
-          class="w-24 h-26 object-cover mx-auto"
-          loading="lazy"
-        />
-        <div class="mt-2 font-medium">{{ category.name }}</div>
-      </div>
+      <template v-if="categories.length">
+        <div
+          v-for="category in categories"
+          :key="category.id"
+          class="text-center bg-white p-4 rounded-lg shadow w-32 cursor-pointer transition duration-200 hover:shadow-lg hover:-translate-y-1 hover:ring-2 hover:ring-[#e29396]"
+          @click="router.push({ path: '/products', query: { category: category.name } })"
+        >
+          <img
+            :src="`/images/categories/${category.imageName}`"
+            :alt="category.name"
+            class="w-24 h-26 object-cover mx-auto"
+            loading="lazy"
+          />
+          <div class="mt-2 font-medium">{{ category.name }}</div>
+        </div>
+      </template>
+      <template v-else>
+        <div class="text-gray-400 text-center w-full py-8">No categories found.</div>
+      </template>
     </div>
 
     <!-- New Arrivals -->
     <div class="max-w-5xl mx-auto px-4 pb-12">
       <h2 class="text-2xl font-bold mb-4">New Arrivals</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div v-if="newArrivals.length" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <div
           v-for="product in newArrivals"
           :key="product.id"
@@ -52,6 +57,7 @@
           </div>
         </div>
       </div>
+      <div v-else class="text-gray-400 text-center w-full py-8">No new arrivals at the moment.</div>
     </div>
   </div>
 </template>
