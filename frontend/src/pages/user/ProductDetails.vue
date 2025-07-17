@@ -27,7 +27,7 @@
       <h4 class="text-lg font-semibold mb-1">Ingredients</h4>
       <div class="grid grid-cols-2 gap-2 text-left mb-6">
         <div
-          v-for="(item, index) in (product?.ingredients || '').split(',')"
+          v-for="(item, index) in ingredients"
           :key="index"
           class="flex items-start gap-2 bg-[#f9f9f9] rounded-lg px-3 py-2 shadow-sm"
         >
@@ -88,6 +88,7 @@ const cartStore = useCartStore()
 const id = +route.params.id
 
 const product = computed(() => products.value.find((p) => p.id === id))
+const ingredients = computed(() => product.value?.ingredients.split(',') || [])
 
 const quantity = ref(1)
 
@@ -117,7 +118,11 @@ const addToCart = () => {
   }
 }
 
-onMounted(() => {
-  if (!products.value.length) getProducts()
+onMounted(async () => {
+  if (!products.value.length) await getProducts()
+  if (!product.value) {
+    message.show('Product not found!', 'error')
+    router.push('/products')
+  }
 })
 </script>
