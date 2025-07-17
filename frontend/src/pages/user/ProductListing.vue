@@ -33,6 +33,29 @@
 
       <!-- Product Grid -->
       <section>
+        <!-- API/server error -->
+        <div v-if="getProductsError" class="col-span-full text-center py-12">
+          <p class="text-red-500 text-lg font-semibold">
+            Sorry, we’re unable to fetch products right now. Please try again later or contact the
+            administrator.
+          </p>
+        </div>
+
+        <!-- No products found for filter/search -->
+        <div
+          v-else-if="filteredProducts.length === 0"
+          class="col-span-full text-center py-12 text-gray-500"
+        >
+          No products found
+          <span v-if="selectedCategories.length === 1 && selectedCategories[0] !== 'all'">
+            in “{{ selectedCategories[0] }}”
+          </span>
+          <span v-else-if="selectedCategories.length > 1">
+            in “{{ selectedCategories.filter((c) => c !== 'all').join(', ') }}”
+          </span>
+          . Please try different categories or keywords.
+        </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <div
             v-for="product in filteredProducts"
@@ -73,7 +96,7 @@ const categoryStore = useCategoryStore()
 const { products } = storeToRefs(productStore)
 const { categories } = storeToRefs(categoryStore)
 const { fetch: getCategories } = useGetCategories()
-const { fetch: getProducts } = useGetProducts()
+const { fetch: getProducts, error: getProductsError } = useGetProducts()
 
 const search = ref('')
 const selectedCategories = ref<string[]>(['all'])
