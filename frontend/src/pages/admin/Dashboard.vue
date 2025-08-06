@@ -122,8 +122,9 @@ const stats = ref<DashboardStats>({
 })
 
 onMounted(async () => {
-  if (!orders.value.length) getOrders()
-  recentOrders.value = orderStore.orders.slice(-5).reverse()
+  if (!orders.value.length) await getOrders()
+  console.log(orders.value)
+  recentOrders.value = orders.value.slice(-5).reverse()
   const dashboardData = await getDashboardStats()
   stats.value = dashboardData
 })
