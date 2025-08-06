@@ -5,22 +5,22 @@
     <!-- Info Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-white shadow rounded p-4 flex flex-col items-center">
-        <img src="/images/dashboard/order.png" class="w-10 h-10 mb-2" />
+        <img src="/images/dashboard/order.webp" class="w-10 h-10 mb-2" />
         <p class="text-gray-500">Today's Orders</p>
         <p class="text-xl font-bold">{{ stats.todayOrders }}</p>
       </div>
       <div class="bg-white shadow rounded p-4 flex flex-col items-center">
-        <img src="/images/dashboard/coin.png" class="w-10 h-10 mb-2" />
+        <img src="/images/dashboard/coin.webp" class="w-10 h-10 mb-2" />
         <p class="text-gray-500">Monthly Revenue</p>
         <p class="text-xl font-bold">${{ stats.monthlyRevenue }}</p>
       </div>
       <div class="bg-white shadow rounded p-4 flex flex-col items-center">
-        <img src="/images/dashboard/cake.png" class="w-10 h-10 mb-2" />
+        <img src="/images/dashboard/cake.webp" class="w-10 h-10 mb-2" />
         <p class="text-gray-500">Products</p>
         <p class="text-xl font-bold">{{ stats.productCount }}</p>
       </div>
       <div class="bg-white shadow rounded p-4 flex flex-col items-center">
-        <img src="/images/dashboard/user.png" class="w-10 h-10 mb-2" />
+        <img src="/images/dashboard/user.webp" class="w-10 h-10 mb-2" />
         <p class="text-gray-500">Total Users</p>
         <p class="text-xl font-bold">{{ stats.userCount }}</p>
       </div>
